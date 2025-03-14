@@ -58,6 +58,11 @@ body {
 #balance {
     color: #0a87d8;
     font-size: 28px;
+    position: relative;
+    display: inline-block;
+    min-width: 40px;
+    text-align: right;
+    transition: color 0.3s ease;
 }
 
 .game-area {
@@ -75,6 +80,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    touch-action: manipulation;
 }
 
 #molecule {
@@ -159,4 +167,45 @@ body {
     animation: float-up 1s forwards;
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
     z-index: 10;
+}
+
+.balance-highlight {
+    color: #4cd964 !important;
+}
+
+/* Анимация пульсации */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+/* Летящее число к счетчику баланса */
+.flying-number {
+    position: absolute;
+    font-size: 20px;
+    font-weight: bold;
+    color: #4cd964;
+    pointer-events: none;
+    z-index: 100;
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+}
+
+/* Стиль для сообщения Doubled */
+.doubled-text {
+    position: absolute;
+    color: #ff3b30;
+    font-weight: bold;
+    font-size: 20px;
+    pointer-events: none;
+    animation: float-up-doubled 1.2s forwards;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+    z-index: 10;
+}
+
+@keyframes float-up-doubled {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    30% { transform: translate(-50%, -80%) scale(1.3); opacity: 1; }
+    100% { transform: translate(-50%, -120%) scale(1); opacity: 0; }
 } 
