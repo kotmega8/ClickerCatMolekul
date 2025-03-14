@@ -7,6 +7,7 @@ const energyRegenInterval = 5000; // 5 секунд (5000 мс)
 const energyPerClick = 1; // Сколько энергии тратится за клик
 const rotationSpeed = 0.005; // Базовая скорость вращения
 let currentRotationSpeed = rotationSpeed;
+const doubleClickChance = 0.1; // 10% шанс удвоенного клика
 
 // Элементы DOM
 const balanceElement = document.getElementById('balance');
@@ -37,8 +38,8 @@ function createMolecule() {
     moleculeGroup.add(centerAtom);
     
     // Создаем атомы и орбитали
-    const orbitals = 4;
-    const atomsPerOrbital = [3, 4, 5, 3, 4, 3]; // Разное количество атомов для каждой орбитали
+    const orbitals = 3;
+    const atomsPerOrbital = [3, 4, 5]; // Разное количество атомов для каждой орбитали
     const orbitRadius = 2.5;
     
     // Массив для хранения позиций всех созданных атомов
@@ -202,6 +203,65 @@ function regenerateEnergy() {
 // Запуск регенерации энергии
 setInterval(regenerateEnergy, energyRegenInterval);
 
+// Функция для анимированного обновления баланса
+function updateBalanceWithAnimation(newValue) {
+    // Обновляем числовое значение баланса
+    balance = newValue;
+    balanceElement.textContent = balance;
+    
+    // Добавляем класс для подсветки
+    balanceElement.classList.add('balance-highlight');
+    
+    // Добавляем анимацию пульсации
+    balanceElement.style.animation = 'pulse 0.3s ease-in-out';
+    
+    // Через небольшую задержку убираем класс подсветки и анимацию
+    setTimeout(() => {
+        balanceElement.classList.remove('balance-highlight');
+        balanceElement.style.animation = '';
+    }, 500);
+}
+
+// Функция для создания летящего числа к балансу
+function createFlyingNumber(value, startX, startY) {
+    const statsRect = document.querySelector('.stats').getBoundingClientRect();
+    const containerRect = moleculeContainer.getBoundingClientRect();
+    
+    // Создаем элемент летящего числа
+    const flyingNumber = document.createElement('div');
+    flyingNumber.className = 'flying-number';
+    flyingNumber.textContent = value > 0 ? `+${value}` : value;
+    
+    // Если это удвоенный клик, меняем цвет на красный
+    if (value >= 2) {
+        flyingNumber.style.color = '#ff3b30';
+    }
+    
+    // Задаем начальную позицию (по координатам клика)
+    flyingNumber.style.left = `${startX}px`;
+    flyingNumber.style.top = `${startY}px`;
+    
+    // Вычисляем конечную позицию (баланс в шапке)
+    const targetX = statsRect.left + statsRect.width - 40 - containerRect.left;
+    const targetY = statsRect.top + statsRect.height / 2 - containerRect.top;
+    
+    // Добавляем элемент в DOM
+    moleculeContainer.appendChild(flyingNumber);
+    
+    // Запускаем анимацию движения к счетчику баланса
+    setTimeout(() => {
+        flyingNumber.style.left = `${targetX}px`;
+        flyingNumber.style.top = `${targetY}px`;
+        flyingNumber.style.opacity = '0';
+        flyingNumber.style.transform = 'scale(0.5)';
+    }, 10);
+    
+    // Удаляем элемент после завершения анимации
+    setTimeout(() => {
+        flyingNumber.remove();
+    }, 1000);
+}
+
 // Обработка клика по молекуле
 moleculeContainer.addEventListener('click', function(event) {
     // Проверяем, достаточно ли энергии
@@ -210,22 +270,28 @@ moleculeContainer.addEventListener('click', function(event) {
         energy -= energyPerClick;
         updateEnergyDisplay();
         
-        // Увеличиваем баланс
-        balance++;
-        balanceElement.textContent = balance;
-        
-        // Увеличиваем скорость вращения молекулы
-        currentRotationSpeed = rotationSpeed * 3;
+        // Проверяем на удвоенный клик (10% шанс)
+        const isDoubleClick = Math.random() < doubleClickChance;
+        const pointsToAdd = isDoubleClick ? 2 : 1;
         
         // Координаты клика
         const clickX = event.offsetX;
         const clickY = event.offsetY;
         
+        // Увеличиваем баланс с анимацией
+        updateBalanceWithAnimation(balance + pointsToAdd);
+        
+        // Создаем летящее число к балансу
+        createFlyingNumber(pointsToAdd, clickX, clickY);
+        
+        // Увеличиваем скорость вращения молекулы
+        currentRotationSpeed = rotationSpeed * 3;
+        
         // Добавляем визуальный эффект клика
         const clickEffect = document.createElement('div');
         clickEffect.classList.add('click-effect');
-        clickEffect.style.left = `${clickX - 5}px`;
-        clickEffect.style.top = `${clickY - 15}px`;
+        clickEffect.style.left = `${clickX - 25}px`;
+        clickEffect.style.top = `${clickY - 25}px`;
         moleculeContainer.appendChild(clickEffect);
         
         // Удаляем эффект после анимации
@@ -233,10 +299,29 @@ moleculeContainer.addEventListener('click', function(event) {
             clickEffect.remove();
         }, 500);
         
-        // Показываем плавающий текст +1 по центру кружка клика
+        // Показываем плавающий текст +1 или +2 по центру кружка клика
         const floatingText = document.createElement('div');
         floatingText.classList.add('energy-add');
-        floatingText.innerText = '+1';
+        floatingText.innerText = isDoubleClick ? '+2' : '+1';
+        
+        // Если это удвоенный клик, меняем цвет на красный
+        if (isDoubleClick) {
+            floatingText.style.color = '#ff3b30';
+            
+            // Также показываем надпись "Doubled!"
+            const doubledText = document.createElement('div');
+            doubledText.classList.add('doubled-text');
+            doubledText.innerText = 'Doubled!';
+            doubledText.style.left = '50%';
+            doubledText.style.top = '50%';
+            moleculeContainer.appendChild(doubledText);
+            
+            // Удаляем надпись после анимации
+            setTimeout(() => {
+                doubledText.remove();
+            }, 1200);
+        }
+        
         floatingText.style.left = `${clickX}px`;
         floatingText.style.top = `${clickY}px`;
         floatingText.style.transform = 'translate(-50%, -50%)';
@@ -256,4 +341,5 @@ moleculeContainer.addEventListener('click', function(event) {
 });
 
 // Инициализация дисплея
-updateEnergyDisplay(); 
+updateEnergyDisplay();
+balanceElement.textContent = balance; 
