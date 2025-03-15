@@ -38,7 +38,7 @@ function createMolecule() {
     moleculeGroup.add(centerAtom);
     
     // Создаем атомы и орбитали
-    const orbitals = 3;
+    const orbitals = 1;
     const atomsPerOrbital = [3, 4, 5]; // Разное количество атомов для каждой орбитали
     const orbitRadius = 2.5;
     
@@ -262,6 +262,76 @@ function createFlyingNumber(value, startX, startY) {
     }, 1000);
 }
 
+// Инициализация дисплея
+updateEnergyDisplay();
+balanceElement.textContent = balance;
+
+// Переменные для профиля
+const userBalanceElement = document.getElementById('user-balance');
+const experienceRingProgress = document.querySelector('.experience-ring-progress');
+const experienceTextElement = document.querySelector('.experience-text');
+let userExperience = 0;
+const maxExperience = 100;
+
+// Установка начального состояния кольца опыта (0%)
+updateExperienceRing(userExperience, maxExperience);
+
+// Функция для обновления кольца опыта
+function updateExperienceRing(currentExp, maxExp) {
+    const percentage = currentExp / maxExp;
+    const perimeter = 283; // 2 * PI * r (r = 45)
+    const offset = perimeter - (perimeter * percentage);
+    experienceRingProgress.style.strokeDashoffset = offset;
+    
+    // Обновляем текст опыта
+    experienceTextElement.textContent = `${currentExp}/${maxExp}`;
+    
+    // Проверяем, нужно ли показывать частицы
+    const experienceContainer = document.querySelector('.avatar-container');
+    
+    if (percentage >= 0.8 && currentExp < maxExp) {
+        // Если уровень опыта 80% или больше и не достиг максимума, добавляем класс для частиц
+        experienceContainer.classList.add('particles-active');
+    } else {
+        // Иначе убираем класс
+        experienceContainer.classList.remove('particles-active');
+    }
+}
+
+// Функция для обновления данных профиля
+function updateProfileData() {
+    // Синхронизируем баланс
+    userBalanceElement.textContent = balance;
+}
+
+// Переключение между разделами
+const navItems = document.querySelectorAll('.nav-item');
+const sections = document.querySelectorAll('.section');
+
+navItems.forEach(item => {
+    item.addEventListener('click', function() {
+        // Убираем класс active у всех элементов навигации
+        navItems.forEach(navItem => navItem.classList.remove('active'));
+        
+        // Добавляем класс active к нажатому элементу
+        this.classList.add('active');
+        
+        // Получаем целевой раздел
+        const targetSectionId = this.getAttribute('data-target');
+        
+        // Скрываем все разделы
+        sections.forEach(section => section.classList.remove('active'));
+        
+        // Показываем выбранный раздел
+        document.getElementById(targetSectionId).classList.add('active');
+        
+        // Если переключаемся на профиль, обновляем данные
+        if (targetSectionId === 'profile-section') {
+            updateProfileData();
+        }
+    });
+});
+
 // Обработка клика по молекуле
 moleculeContainer.addEventListener('click', function(event) {
     // Проверяем, достаточно ли энергии
@@ -269,6 +339,12 @@ moleculeContainer.addEventListener('click', function(event) {
         // Уменьшаем энергию
         energy -= energyPerClick;
         updateEnergyDisplay();
+        
+        // Увеличиваем опыт, если он не достиг максимума
+        if (userExperience < maxExperience) {
+            userExperience += 1;
+            updateExperienceRing(userExperience, maxExperience);
+        }
         
         // Проверяем на удвоенный клик (10% шанс)
         const isDoubleClick = Math.random() < doubleClickChance;
@@ -291,7 +367,7 @@ moleculeContainer.addEventListener('click', function(event) {
         const clickEffect = document.createElement('div');
         clickEffect.classList.add('click-effect');
         clickEffect.style.left = `${clickX - 25}px`;
-        clickEffect.style.top = `${clickY - 25}px`;
+        clickEffect.style.top = `${clickY - 15}px`;
         moleculeContainer.appendChild(clickEffect);
         
         // Удаляем эффект после анимации
@@ -338,29 +414,4 @@ moleculeContainer.addEventListener('click', function(event) {
             updateEnergyDisplay();
         }, 300);
     }
-});
-
-// Инициализация дисплея
-updateEnergyDisplay();
-balanceElement.textContent = balance;
-
-// Базовая подготовка для будущего переключения между разделами
-const navItems = document.querySelectorAll('.nav-item');
-
-navItems.forEach(item => {
-    item.addEventListener('click', function() {
-        // Убираем класс active у всех элементов
-        navItems.forEach(navItem => navItem.classList.remove('active'));
-        
-        // Добавляем класс active к нажатому элементу
-        this.classList.add('active');
-        
-        // Получаем целевой раздел
-        const targetSection = this.getAttribute('data-target');
-        
-        // Логируем выбранный раздел (позже здесь будет реальное переключение)
-        console.log(`Выбран раздел: ${targetSection}`);
-        
-        // Здесь в будущем будет код для переключения видимости разделов
-    });
 }); 

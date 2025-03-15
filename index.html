@@ -8,48 +8,101 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <div class="stats">
-                <div class="balance">
-                    <span class="balance-label">Баланс:</span>
-                    <span id="balance">0</span>
+        <!-- Секция молекулы (активная по умолчанию) -->
+        <div class="section active" id="molecule-section">
+            <div class="header">
+                <div class="stats">
+                    <div class="balance">
+                        <span class="balance-label">Баланс:</span>
+                        <span id="balance">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="game-area">
+                <div class="molecule-container">
+                    <div id="molecule"></div>
+                </div>
+            </div>
+            
+            <div class="energy-bar-container">
+                <div class="energy-label">Энергия</div>
+                <div class="energy-bar">
+                    <div id="energy-fill"></div>
+                </div>
+                <div class="energy-value">
+                    <span id="current-energy">100</span>/<span id="max-energy">100</span>
                 </div>
             </div>
         </div>
         
-        <div class="game-area">
-            <div class="molecule-container">
-                <div id="molecule"></div>
+        <!-- Секция профиля (скрыта по умолчанию) -->
+        <div class="section" id="profile-section">
+            <div class="profile-container">
+                <div class="profile-header">
+                    <div class="experience-info">
+                        <span class="experience-text">0/100</span>
+                    </div>
+                    <div class="avatar-container">
+                        <div class="experience-ring">
+                            <svg viewBox="0 0 100 100">
+                                <circle class="experience-ring-bg" cx="50" cy="50" r="45" />
+                                <circle class="experience-ring-progress" cx="50" cy="50" r="45" />
+                            </svg>
+                            <!-- Частицы, которые будут вылетать из кольца -->
+                            <div class="particle particle-1" style="--tx: 0; --ty: -50px;"></div>
+                            <div class="particle particle-2" style="--tx: 50px; --ty: 0;"></div>
+                            <div class="particle particle-3" style="--tx: 0; --ty: 50px;"></div>
+                            <div class="particle particle-4" style="--tx: -50px; --ty: 0;"></div>
+                            <div class="particle particle-5" style="--tx: 35px; --ty: -35px;"></div>
+                            <div class="particle particle-6" style="--tx: -35px; --ty: 35px;"></div>
+                        </div>
+                        <div class="avatar">
+                            <img src="assets/icons/user.svg" alt="Аватар">
+                        </div>
+                    </div>
+                    <div class="username">TestUser</div>
+                </div>
+                
+                <div class="profile-details">
+                    <div class="profile-card">
+                        <div class="profile-info">
+                            <div class="info-item">
+                                <div class="info-label">Уровень</div>
+                                <div class="info-value" id="user-level">1</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Баланс</div>
+                                <div class="info-value" id="user-balance">0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         
-        <div class="energy-bar-container">
-            <div class="energy-label">Энергия</div>
-            <div class="energy-bar">
-                <div id="energy-fill"></div>
-            </div>
-            <div class="energy-value">
-                <span id="current-energy">100</span>/<span id="max-energy">100</span>
-            </div>
+        <!-- Секция магазина (скрыта по умолчанию) -->
+        <div class="section" id="shop-section">
+            <!-- Контент магазина будет добавлен позже -->
         </div>
         
         <!-- Навигационная панель -->
         <nav class="navigation-panel">
-            <div class="nav-item" data-target="profile">
+            <div class="nav-item" data-target="profile-section">
                 <div class="nav-icon">
                     <img src="assets/icons/user.svg" alt="Профиль">
                 </div>
                 <div class="nav-label">Профиль</div>
             </div>
             
-            <div class="nav-item active" data-target="molecule">
+            <div class="nav-item active" data-target="molecule-section">
                 <div class="nav-icon">
                     <img src="assets/icons/molecule.svg" alt="Молекула">
                 </div>
                 <div class="nav-label">Молекула</div>
             </div>
             
-            <div class="nav-item" data-target="shop">
+            <div class="nav-item" data-target="shop-section">
                 <div class="nav-icon">
                     <img src="assets/icons/shop.svg" alt="Магазин">
                 </div>
