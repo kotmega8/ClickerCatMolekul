@@ -3,115 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Молекулярный Кликер</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Молекулярная Утопия</title>
+    <link rel="stylesheet" href="welcome.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Секция молекулы (активная по умолчанию) -->
-        <div class="section active" id="molecule-section">
-            <div class="header">
-                <div class="stats">
-                    <div class="balance">
-                        <span class="balance-label">Баланс:</span>
-                        <span id="balance">0</span>
-                    </div>
-                </div>
+    <div id="app">
+        <div class="welcome-container">
+            <div class="welcome-message-container" id="messageContainer">
+                <!-- Сообщения будут добавляться динамически -->
             </div>
-            
-            <div class="game-area">
-                <div class="molecule-container">
-                    <div id="molecule"></div>
-                </div>
+
+            <div class="welcome-input-container" id="inputContainer" style="display: none;">
+                <input type="text" id="userInput" class="welcome-input" autocomplete="off">
+                <button id="submitButton" class="welcome-button">Далее</button>
             </div>
-            
-            <div class="energy-bar-container">
-                <div class="energy-label">Энергия</div>
-                <div class="energy-bar">
-                    <div id="energy-fill"></div>
-                </div>
-                <div class="energy-value">
-                    <span id="current-energy">100</span>/<span id="max-energy">100</span>
-                </div>
+
+            <div class="login-link" id="loginLink">
+                <span>Я уже существую</span>
             </div>
         </div>
-        
-        <!-- Секция профиля (скрыта по умолчанию) -->
-        <div class="section" id="profile-section">
-            <div class="profile-container">
-                <div class="profile-header">
-                    <div class="experience-info">
-                        <span class="experience-text">0/100</span>
-                    </div>
-                    <div class="avatar-container">
-                        <div class="experience-ring">
-                            <svg viewBox="0 0 100 100">
-                                <circle class="experience-ring-bg" cx="50" cy="50" r="45" />
-                                <circle class="experience-ring-progress" cx="50" cy="50" r="45" />
-                            </svg>
-                            <!-- Частицы, которые будут вылетать из кольца -->
-                            <div class="particle particle-1" style="--tx: 0; --ty: -50px;"></div>
-                            <div class="particle particle-2" style="--tx: 50px; --ty: 0;"></div>
-                            <div class="particle particle-3" style="--tx: 0; --ty: 50px;"></div>
-                            <div class="particle particle-4" style="--tx: -50px; --ty: 0;"></div>
-                            <div class="particle particle-5" style="--tx: 35px; --ty: -35px;"></div>
-                            <div class="particle particle-6" style="--tx: -35px; --ty: 35px;"></div>
-                        </div>
-                        <div class="avatar">
-                            <img src="assets/icons/user.svg" alt="Аватар">
-                        </div>
-                    </div>
-                    <div class="username">TestUser</div>
-                </div>
-                
-                <div class="profile-details">
-                    <div class="profile-card">
-                        <div class="profile-info">
-                            <div class="info-item">
-                                <div class="info-label">Уровень</div>
-                                <div class="info-value" id="user-level">1</div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label">Баланс</div>
-                                <div class="info-value" id="user-balance">0</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Секция магазина (скрыта по умолчанию) -->
-        <div class="section" id="shop-section">
-            <!-- Контент магазина будет добавлен позже -->
-        </div>
-        
-        <!-- Навигационная панель -->
-        <nav class="navigation-panel">
-            <div class="nav-item" data-target="profile-section">
-                <div class="nav-icon">
-                    <img src="assets/icons/user.svg" alt="Профиль">
-                </div>
-                <div class="nav-label">Профиль</div>
-            </div>
-            
-            <div class="nav-item active" data-target="molecule-section">
-                <div class="nav-icon">
-                    <img src="assets/icons/molecule.svg" alt="Молекула">
-                </div>
-                <div class="nav-label">Молекула</div>
-            </div>
-            
-            <div class="nav-item" data-target="shop-section">
-                <div class="nav-icon">
-                    <img src="assets/icons/shop.svg" alt="Магазин">
-                </div>
-                <div class="nav-label">Магазин</div>
-            </div>
-        </nav>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
-    <script src="app.js"></script>
+    <div class="glow-effect"></div>
+
+    <script src="welcome.js"></script>
+    <script>
+        // Проверяем, авторизован ли пользователь
+        document.addEventListener('DOMContentLoaded', function() {
+            const userData = localStorage.getItem('moleculeUser');
+            
+            // Если пользователь уже авторизован, сразу перенаправляем на /molecule
+            if (userData) {
+                window.location.href = 'molecule.html';
+            }
+        });
+    </script>
 </body>
 </html> 

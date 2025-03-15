@@ -9,11 +9,21 @@ const rotationSpeed = 0.005; // Базовая скорость вращения
 let currentRotationSpeed = rotationSpeed;
 const doubleClickChance = 0.1; // 10% шанс удвоенного клика
 
+// Загрузка данных пользователя
+const userData = localStorage.getItem('moleculeUser');
+const userObj = userData ? JSON.parse(userData) : { username: 'TestUser' };
+
 // Элементы DOM
 const balanceElement = document.getElementById('balance');
 const energyFillElement = document.getElementById('energy-fill');
 const currentEnergyElement = document.getElementById('current-energy');
 const moleculeContainer = document.querySelector('.molecule-container');
+const usernameElement = document.getElementById('profile-username');
+
+// Устанавливаем имя пользователя
+if (usernameElement) {
+    usernameElement.textContent = userObj.username;
+}
 
 // Настройка 3D сцены
 const scene = new THREE.Scene();
@@ -304,6 +314,12 @@ function updateProfileData() {
     userBalanceElement.textContent = balance;
 }
 
+// Сделаем функцию updateBalanceWithAnimation глобальной
+window.updateBalanceWithAnimation = updateBalanceWithAnimation;
+
+// Сделаем переменную balance глобальной
+window.balance = balance;
+
 // Переключение между разделами
 const navItems = document.querySelectorAll('.nav-item');
 const sections = document.querySelectorAll('.section');
@@ -328,6 +344,11 @@ navItems.forEach(item => {
         // Если переключаемся на профиль, обновляем данные
         if (targetSectionId === 'profile-section') {
             updateProfileData();
+        }
+        
+        // Если переключаемся на магазин и магазин уже инициализирован
+        if (targetSectionId === 'shop-section' && window.shop) {
+            window.shop.updateShopUI();
         }
     });
 });

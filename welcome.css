@@ -1,0 +1,185 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    overflow: hidden;
+    position: relative;
+}
+
+#app {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    z-index: 1;
+    position: relative;
+}
+
+.welcome-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    height: 100%;
+    padding: 20px;
+}
+
+.welcome-message-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+    width: 100%;
+    position: relative;
+    min-height: 150px; /* Увеличили высоту для больших сообщений */
+}
+
+.welcome-message {
+    font-size: 42px; /* Увеличили размер шрифта */
+    font-weight: bold; /* Сделали текст жирным */
+    color: #000;
+    text-align: center;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(40px); /* Увеличили отступ снизу для более заметной анимации */
+    transition: opacity 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1); /* Замедлили для более плавного эффекта */
+    position: absolute;
+    width: 100%;
+}
+
+.welcome-message.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.welcome-message.message-exit {
+    opacity: 0;
+    transform: translateY(-50px); /* Увеличили смещение при выходе */
+    transition-duration: 0.8s;
+}
+
+.blue-text {
+    color: #0a87d8;
+    font-weight: bold;
+}
+
+.red-text {
+    color: #ff3b30;
+    font-weight: bold;
+}
+
+.welcome-input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.8s forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.welcome-input {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 2px solid rgba(10, 135, 216, 0.3);
+    border-radius: 10px;
+    font-size: 18px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.welcome-input:focus {
+    border-color: #0a87d8;
+    box-shadow: 0 0 10px rgba(10, 135, 216, 0.2);
+}
+
+.welcome-button {
+    padding: 12px 30px;
+    background: linear-gradient(90deg, #0a87d8, #59b6ff);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.welcome-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(10, 135, 216, 0.3);
+}
+
+.welcome-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(10, 135, 216, 0.3);
+}
+
+.error-message {
+    color: #ff3b30;
+    margin-top: -10px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    text-align: left;
+    width: 100%;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+
+.login-link {
+    position: absolute;
+    bottom: 40px;
+    font-size: 14px;
+    color: #0a87d8;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: fadeIn 1.5s forwards;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+    transform: translateY(-2px);
+}
+
+.glow-effect {
+    position: absolute;
+    bottom: -180px; /* Увеличили размер снизу еще больше */
+    left: 0;
+    width: 100%;
+    height: 350px; /* Увеличили высоту */
+    background: radial-gradient(ellipse at center, rgba(10, 135, 216, 0.7) 0%, rgba(10, 135, 216, 0) 70%); /* Увеличена интенсивность еще больше */
+    z-index: 0;
+    pointer-events: none;
+    animation: glowPulse 5s infinite alternate;
+}
+
+@keyframes glowPulse {
+    0% {
+        opacity: 0.7; /* Увеличена начальная интенсивность */
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0.9; /* Увеличена конечная интенсивность */
+        transform: translateY(-20px); /* Увеличена амплитуда */
+    }
+} 

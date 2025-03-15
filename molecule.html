@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Молекулярный Кликер</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="authCheck" style="display: none;">
+        <div class="auth-check-message">
+            <h2>Требуется вход</h2>
+            <p>Для доступа к этой странице необходимо войти в систему.</p>
+            <button id="redirectToLogin">Вернуться на главную</button>
+        </div>
+    </div>
+    
+    <div id="mainContent">
+        <div class="container">
+            <!-- Секция молекулы (активная по умолчанию) -->
+            <div class="section active" id="molecule-section">
+                <div class="header">
+                    <div class="stats">
+                        <div class="balance">
+                            <img src="assets/icons/coins.svg" alt="Монеты" class="icon-small">
+                            <span class="balance-label">Баланс:</span>
+                            <span id="balance">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="game-area">
+                    <div class="molecule-container">
+                        <div id="molecule"></div>
+                    </div>
+                </div>
+                
+                <div class="energy-bar-container">
+                    <div class="energy-label">
+                        <img src="assets/icons/energy.svg" alt="Энергия" class="icon-small">
+                        <span>Энергия</span>
+                    </div>
+                    <div class="energy-bar">
+                        <div id="energy-fill"></div>
+                    </div>
+                    <div class="energy-value">
+                        <span id="current-energy">100</span>/<span id="max-energy">100</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Секция профиля (скрыта по умолчанию) -->
+            <div class="section" id="profile-section">
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <div class="experience-info">
+                            <span class="experience-text">0/100</span>
+                        </div>
+                        <div class="avatar-container">
+                            <div class="experience-ring">
+                                <svg viewBox="0 0 100 100">
+                                    <circle class="experience-ring-bg" cx="50" cy="50" r="45" />
+                                    <circle class="experience-ring-progress" cx="50" cy="50" r="45" />
+                                </svg>
+                                <!-- Частицы, которые будут вылетать из кольца -->
+                                <div class="particle particle-1" style="--tx: 0; --ty: -50px;"></div>
+                                <div class="particle particle-2" style="--tx: 50px; --ty: 0;"></div>
+                                <div class="particle particle-3" style="--tx: 0; --ty: 50px;"></div>
+                                <div class="particle particle-4" style="--tx: -50px; --ty: 0;"></div>
+                                <div class="particle particle-5" style="--tx: 35px; --ty: -35px;"></div>
+                                <div class="particle particle-6" style="--tx: -35px; --ty: 35px;"></div>
+                            </div>
+                            <div class="avatar">
+                                <img src="assets/icons/user.svg" alt="Аватар">
+                            </div>
+                        </div>
+                        <div class="username" id="profile-username">TestUser</div>
+                    </div>
+                    
+                    <div class="profile-details">
+                        <div class="profile-card">
+                            <div class="profile-info">
+                                <div class="info-item">
+                                    <div class="info-label">Уровень</div>
+                                    <div class="info-value" id="user-level">1</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">Баланс</div>
+                                    <div class="info-value-with-icon">
+                                        <img src="assets/icons/coins.svg" alt="Монеты" class="icon-small">
+                                        <span id="user-balance">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Секция магазина (скрыта по умолчанию) -->
+            <div class="section" id="shop-section">
+                <div class="shop-container">
+                    <div class="shop-header">
+                        <h2 class="shop-title">Магазин</h2>
+                    </div>
+                    
+                    <!-- Премиум товар (Эволюция) -->
+                    <div class="shop-panel">
+                        <div class="shop-item premium-item" data-item="evolution">
+                            <div class="item-icon premium-icon">
+                                <img src="assets/icons/molecule.svg" alt="Эволюция">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-header">
+                                    <div class="item-title premium-title">Эволюция</div>
+                                    <div class="item-price premium-price">
+                                        <span>500</span>
+                                        <img src="assets/icons/coins.svg" alt="Монеты" class="icon-small">
+                                    </div>
+                                </div>
+                                <div class="item-description">Усиляет молекулу, открывая новые функции</div>
+                                <div class="item-requirements">Условие: 2 уровень</div>
+                                <button class="buy-button premium-button" data-item="evolution">Купить</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Скорость восстановления энергии -->
+                        <div class="shop-item" data-item="energy-regen">
+                            <div class="item-icon">
+                                <img src="assets/icons/restoration.svg" alt="Восстановление энергии">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-header">
+                                    <div class="item-title">Скорость восстановления энергии</div>
+                                    <div class="item-price">
+                                        <span>250</span>
+                                        <img src="assets/icons/coins.svg" alt="Монеты" class="icon-small">
+                                    </div>
+                                </div>
+                                <div class="item-description">5 сек. → 4.9 сек.</div>
+                                <button class="buy-button" data-item="energy-regen">Купить</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Прибыль нажатия -->
+                        <div class="shop-item" data-item="click-profit">
+                            <div class="item-icon">
+                                <img src="assets/icons/cursor-finger-click.svg" alt="Прибыль нажатия">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-header">
+                                    <div class="item-title">Прибыль нажатия</div>
+                                    <div class="item-price">
+                                        <span>100</span>
+                                        <img src="assets/icons/coins.svg" alt="Монеты" class="icon-small">
+                                    </div>
+                                </div>
+                                <div class="item-description">1 мон. за клик → 2 мон. за клик</div>
+                                <button class="buy-button" data-item="click-profit">Купить</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Максимальный запас энергии -->
+                        <div class="shop-item" data-item="max-energy">
+                            <div class="item-icon">
+                                <img src="assets/icons/energy.svg" alt="Максимальная энергия">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-header">
+                                    <div class="item-title">Максимальный запас энергии</div>
+                                    <div class="item-price">
+                                        <span>150</span>
+                                        <img src="assets/icons/coins.svg" alt="Монеты" class="icon-small">
+                                    </div>
+                                </div>
+                                <div class="item-description">100 макс. энергии → 150 макс. энергии</div>
+                                <button class="buy-button" data-item="max-energy">Купить</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Панель баланса -->
+                    <div class="shop-balance-panel">
+                        <div class="shop-balance">
+                            <img src="assets/icons/coins.svg" alt="Монеты" class="icon-medium">
+                            <span id="shop-balance">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Навигационная панель -->
+            <nav class="navigation-panel">
+                <div class="nav-item" data-target="profile-section">
+                    <div class="nav-icon">
+                        <img src="assets/icons/user.svg" alt="Профиль">
+                    </div>
+                    <div class="nav-label">Профиль</div>
+                </div>
+                
+                <div class="nav-item active" data-target="molecule-section">
+                    <div class="nav-icon">
+                        <img src="assets/icons/molecule.svg" alt="Молекула">
+                    </div>
+                    <div class="nav-label">Молекула</div>
+                </div>
+                
+                <div class="nav-item" data-target="shop-section">
+                    <div class="nav-icon">
+                        <img src="assets/icons/shop.svg" alt="Магазин">
+                    </div>
+                    <div class="nav-label">Магазин</div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script>
+        // Проверка авторизации
+        document.addEventListener('DOMContentLoaded', function() {
+            const userData = localStorage.getItem('moleculeUser');
+            
+            if (!userData) {
+                // Если пользователь не авторизован, показываем сообщение и скрываем контент
+                document.getElementById('authCheck').style.display = 'flex';
+                document.getElementById('mainContent').style.display = 'none';
+                
+                // Обработчик для кнопки перенаправления
+                document.getElementById('redirectToLogin').addEventListener('click', function() {
+                    window.location.href = 'index.html';
+                });
+            } else {
+                // Если пользователь авторизован, показываем его имя в профиле
+                const user = JSON.parse(userData);
+                document.getElementById('profile-username').textContent = user.username;
+            }
+        });
+    </script>
+    <script src="app.js"></script>
+    <script src="molecule-shop.js"></script>
+</body>
+</html> 
